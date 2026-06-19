@@ -1,0 +1,107 @@
+{
+  "schema_version": 3,
+  "public_url": "http://120.24.117.67/projects/notebase/",
+  "final_url": "http://120.24.117.67/projects/notebase/",
+  "base_path_ok": true,
+  "release_version": "0.0.1",
+  "document_response_headers": {
+    "content-type": "text/html; charset=utf-8",
+    "cache-control": "no-store",
+    "server": "nginx/1.24.0 (Ubuntu)"
+  },
+  "pages": [
+    {
+      "path": "/",
+      "url": "http://120.24.117.67/projects/notebase/",
+      "ok": true,
+      "title": "Notebase - 笔记管理系统",
+      "status": 200,
+      "load_time_ms": 1200
+    }
+  ],
+  "workflow_checks": [
+    {
+      "ok": true,
+      "description": "登录(alice/demo123): 登录成功，显示7条笔记，用户名和登出按钮可见"
+    },
+    {
+      "ok": true,
+      "description": "登录(bob/demo123): bob登录成功，仅看到自己的笔记，无法看到alice的笔记，权限隔离正常"
+    },
+    {
+      "ok": true,
+      "description": "笔记列表: 7条笔记显示标题、更新时间、内容摘要，标签可见"
+    },
+    {
+      "ok": true,
+      "description": "笔记创建: 新建'Hermes 验收测试笔记'，Markdown内容含标题/复选框/代码块，左右分栏实时预览渲染正确"
+    },
+    {
+      "ok": true,
+      "description": "标签筛选: 点击'验收'标签，仅显示1条匹配笔记"
+    },
+    {
+      "ok": true,
+      "description": "英文搜索: 搜索'Python'返回2条匹配笔记，FTS5正常"
+    },
+    {
+      "ok": true,
+      "description": "分享链接: 生成分享链接成功，公开分享页面无需登录可访问，Markdown渲染完整"
+    },
+    {
+      "ok": true,
+      "description": "控制台错误: 浏览器控制台无JS错误"
+    }
+  ],
+  "failed_requests": [],
+  "http_errors": [],
+  "console_errors": [],
+  "screenshots": [
+    "evidence/verification/login-0.0.1.png",
+    "evidence/verification/notes-list-0.0.1.png",
+    "evidence/verification/note-edit-0.0.1.png",
+    "evidence/verification/share-link-0.0.1.png",
+    "evidence/verification/share-public-0.0.1.png",
+    "evidence/verification/permission-bob-0.0.1.png"
+  ],
+  "visual_review": {
+    "provider": "kimi",
+    "model": "moonshot-v1-vision",
+    "verdict": "pass",
+    "issues": [],
+    "summary": "Kimi多模态模型审阅5张关键页面截图全部通过：登录页元素完整，笔记列表布局清晰含7条笔记，笔记编辑页Markdown双栏渲染正确（标题/复选框/代码块），分享面板URL和撤销按钮可见，公开分享页无需登录且内容完整渲染"
+  },
+  "static_assets": [
+    {
+      "url": "http://120.24.117.67/projects/notebase/static/css/style.css?v=0.0.1",
+      "type": "link",
+      "http_status": 200,
+      "transfer_size": 10426
+    },
+    {
+      "url": "http://120.24.117.67/projects/notebase/static/js/app.js?v=0.0.1",
+      "type": "script",
+      "http_status": 200,
+      "transfer_size": 3361
+    }
+  ],
+  "stylesheets": [
+    {
+      "resolved_url": "http://120.24.117.67/projects/notebase/static/css/style.css?v=0.0.1",
+      "http_status": 200,
+      "transfer_size": 10426
+    }
+  ],
+  "asset_probes": [
+    {
+      "url": "http://120.24.117.67/projects/notebase/static/css/style.css?v=0.0.1",
+      "type": "link",
+      "http_status": 200
+    },
+    {
+      "url": "http://120.24.117.67/projects/notebase/static/js/app.js?v=0.0.1",
+      "type": "script",
+      "http_status": 200
+    }
+  ]
+}
