@@ -1,0 +1,28 @@
+{
+  "session_id": "claude-plan-20260619-001",
+  "iteration": "0.0.1",
+  "project": "notebase",
+  "timestamp": "2026-06-19T08:00:00+08:00",
+  "technical_plan": {
+    "markdown": "docs/decisions/001-technical-plan.md",
+    "json": "evidence/claude/technical-plan-0.0.1.json",
+    "summary": "FastAPI + SQLAlchemy + SQLite 后端，Vanilla JS SPA 前端，marked.js Markdown 渲染，Session Cookie 认证，bleach XSS 防护，FTS5 全文搜索，Hash 路由，响应式 CSS"
+  },
+  "tasks": [
+    {"id": 1, "name": "项目骨架", "description": "目录结构、requirements.txt、.env.example、config.py", "status": "pending"},
+    {"id": 2, "name": "数据库", "description": "models 定义、database.py、FTS5 虚拟表、seed.py 演示数据", "status": "pending"},
+    {"id": 3, "name": "认证模块", "description": "auth 路由+服务、中间件、Session Cookie、依赖注入", "status": "pending"},
+    {"id": 4, "name": "笔记模块", "description": "笔记 CRUD 路由+服务、Markdown 渲染+清洗、FTS5 搜索", "status": "pending"},
+    {"id": 5, "name": "标签模块", "description": "标签 CRUD、笔记-标签关联路由", "status": "pending"},
+    {"id": 6, "name": "分享模块", "description": "分享链接生成/验证/撤销、公开访问页面模板", "status": "pending"},
+    {"id": 7, "name": "前端", "description": "SPA 外壳、路由、页面、组件、CSS 响应式布局", "status": "pending"},
+    {"id": 8, "name": "缓存策略", "description": "版本令牌注入 HTML、Cache-Control 中间件", "status": "pending"},
+    {"id": 9, "name": "自测", "description": "pytest 覆盖注册登录、笔记CRUD、标签、搜索、分享链接、权限隔离", "status": "pending"},
+    {"id": 10, "name": "文档同步", "description": "architecture.md 完整化、runbook.md 补充启动/测试步骤", "status": "pending"}
+  ],
+  "implementation_commits": [],
+  "self_test_command": "cd /Users/cqw/外部需求/proj-bd3aaa && pytest tests/ -v --tb=short",
+  "self_test_result": null,
+  "ready_for_verification": false,
+  "note": "技术方案已完成，等待 Hermes 确认后进入实施阶段。实施完成后需自测通过并更新此文件为 ready_for_verification: true。"
+}

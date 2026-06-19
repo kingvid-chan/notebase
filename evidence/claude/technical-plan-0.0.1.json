@@ -1,0 +1,217 @@
+{
+  "iteration": "0.0.1",
+  "project": "notebase",
+  "date": "2026-06-19",
+  "tech_stack": {
+    "backend": {
+      "framework": "FastAPI (Python 3.12)",
+      "orm": "SQLAlchemy 2.0 (async)",
+      "database": "SQLite (aiosqlite, WAL mode)",
+      "auth": "Signed session cookie (itsdangerous URLSafeTimedSerializer)",
+      "password_hashing": "passlib[bcrypt] cost=12",
+      "markdown": "Python-Markdown + bleach sanitization",
+      "template_engine": "Jinja2 (FastAPI built-in)",
+      "http_server": "Uvicorn"
+    },
+    "frontend": {
+      "architecture": "SPA with hash routing",
+      "language": "Vanilla JavaScript (ES Modules)",
+      "markdown_editor": "Custom split-pane (textarea + preview div)",
+      "markdown_renderer": "marked.js v15+ client-side + Python-Markdown server-side",
+      "css": "Custom responsive CSS (Grid/Flexbox)",
+      "http_client": "Fetch API",
+      "icons": "Inline SVG / Unicode"
+    },
+    "testing": {
+      "framework": "pytest",
+      "async_support": "pytest-asyncio + httpx.AsyncClient"
+    }
+  },
+  "data_model": {
+    "entities": [
+      {
+        "name": "User",
+        "table": "users",
+        "fields": ["id:INTEGER PK", "username:TEXT UNIQUE", "email:TEXT UNIQUE", "password_hash:TEXT", "created_at:TEXT", "updated_at:TEXT"]
+      },
+      {
+        "name": "Note",
+        "table": "notes",
+        "fields": ["id:INTEGER PK", "user_id:INTEGER FK(users)", "title:TEXT", "content_markdown:TEXT", "content_html:TEXT", "is_public:INTEGER", "created_at:TEXT", "updated_at:TEXT"],
+        "indexes": ["idx_notes_user_id", "idx_notes_updated_at"]
+      },
+      {
+        "name": "Tag",
+        "table": "tags",
+        "fields": ["id:INTEGER PK", "name:TEXT", "user_id:INTEGER FK(users)", "created_at:TEXT"],
+        "constraints": ["UNIQUE(user_id, name)"],
+        "indexes": ["idx_tags_user_id"]
+      },
+      {
+        "name": "NoteTag",
+        "table": "note_tags",
+        "fields": ["note_id:INTEGER FK(notes) ON DELETE CASCADE", "tag_id:INTEGER FK(tags) ON DELETE CASCADE"],
+        "constraints": ["PRIMARY KEY (note_id, tag_id)"]
+      },
+      {
+        "name": "ShareLink",
+        "table": "share_links",
+        "fields": ["id:INTEGER PK", "note_id:INTEGER FK(notes) ON DELETE CASCADE", "token:TEXT UNIQUE", "expires_at:TEXT?", "created_at:TEXT"],
+        "indexes": ["idx_share_links_token"]
+      }
+    ],
+    "relationships": "User 1:N Note; Note N:M Tag via NoteTag; Note 1:N ShareLink",
+    "fts5": "FTS5 virtual table on notes(title, content_markdown) for full-text search"
+  },
+  "api_design": {
+    "base_path": "/projects/notebase",
+    "endpoints": {
+      "auth": [
+        {"method": "POST", "path": "/api/auth/register", "body": "{username, email, password}", "response": "{user, session_token}", "auth_required": false},
+        {"method": "POST", "path": "/api/auth/login", "body": "{username, password}", "response": "{user, session_token}", "auth_required": false},
+        {"method": "POST", "path": "/api/auth/logout", "response": "{ok: true}", "auth_required": true},
+        {"method": "GET", "path": "/api/auth/me", "response": "{user}", "auth_required": true}
+      ],
+      "notes": [
+        {"method": "GET", "path": "/api/notes", "query": "?tag=&q=&page=&limit=", "response": "{notes, total}", "auth_required": true},
+        {"method": "POST", "path": "/api/notes", "body": "{title, content_markdown, tags:[]}", "response": "{note}", "auth_required": true},
+        {"method": "GET", "path": "/api/notes/{id}", "response": "{note, tags}", "auth_required": true},
+        {"method": "PUT", "path": "/api/notes/{id}", "body": "{title?, content_markdown?, is_public?}", "response": "{note}", "auth_required": true},
+        {"method": "DELETE", "path": "/api/notes/{id}", "response": "{ok: true}", "auth_required": true}
+      ],
+      "tags": [
+        {"method": "GET", "path": "/api/tags", "response": "{tags}", "auth_required": true},
+        {"method": "POST", "path": "/api/tags", "body": "{name}", "response": "{tag}", "auth_required": true},
+        {"method": "DELETE", "path": "/api/tags/{id}", "response": "{ok: true}", "auth_required": true},
+        {"method": "POST", "path": "/api/notes/{id}/tags", "body": "{tag_id}", "response": "{ok: true}", "auth_required": true},
+        {"method": "DELETE", "path": "/api/notes/{id}/tags/{tag_id}", "response": "{ok: true}", "auth_required": true}
+      ],
+      "share": [
+        {"method": "POST", "path": "/api/notes/{id}/share", "body": "{expires_at?}", "response": "{share_link}", "auth_required": true},
+        {"method": "DELETE", "path": "/api/notes/{id}/share/{share_id}", "response": "{ok: true}", "auth_required": true},
+        {"method": "GET", "path": "/api/notes/{id}/shares", "response": "{share_links}", "auth_required": true}
+      ],
+      "public": [
+        {"method": "GET", "path": "/share/{token}", "response": "HTML page (read-only rendered note)", "auth_required": false}
+      ]
+    },
+    "response_format": {
+      "success": "{ok: true, data: {...}}",
+      "error": "{ok: false, error: {code: string, message: string}}"
+    }
+  },
+  "frontend_routing": {
+    "type": "hash-based SPA",
+    "routes": [
+      {"hash": "#/login", "page": "login", "auth_required": false},
+      {"hash": "#/register", "page": "register", "auth_required": false},
+      {"hash": "#/notes", "page": "note-list", "auth_required": true},
+      {"hash": "#/notes/new", "page": "note-create", "auth_required": true},
+      {"hash": "#/notes/{id}", "page": "note-detail-edit", "auth_required": true}
+    ],
+    "public_share_page": "Server-rendered HTML at /share/{token}, not SPA-routed"
+  },
+  "directory_structure": {
+    "backend": "FastAPI app with models/schemas/routers/services layers",
+    "frontend": "Vanilla JS with css/js/lib directories, component-based architecture",
+    "templates": "Jinja2 templates at backend/templates/ (index.html SPA shell + shared-note.html public page)",
+    "tests": "pytest at tests/ with conftest.py fixtures",
+    "docs": "architecture.md, runbook.md, decisions/, iterations/"
+  },
+  "security": {
+    "auth": {
+      "password": "bcrypt cost=12 via passlib",
+      "session": "Signed cookie (itsdangerous), HttpOnly/Secure/SameSite=Lax",
+      "session_expiry": "24 hours default",
+      "permission_isolation": "Dependency injection validates ownership on all note/tag endpoints"
+    },
+    "share_links": {
+      "token_entropy": "192 bits (secrets.token_urlsafe(32))",
+      "expiry_support": "Optional expires_at, enforced server-side",
+      "access": "Read-only rendered HTML, no editing capability"
+    },
+    "input_validation": {
+      "username": "3-30 chars, alphanumeric + underscore",
+      "password": "6-128 chars",
+      "email": "Pydantic EmailStr",
+      "note_title": "1-200 chars",
+      "note_content": "max 1MB"
+    },
+    "xss_prevention": {
+      "markdown_sanitization": "bleach whitelist (allowed tags: h1-h6,p,a,img,ul,ol,li,code,pre,blockquote,em,strong,table,thead,tbody,tr,th,td,hr,br)",
+      "template_escaping": "Jinja2 autoescape",
+      "json_encoding": "FastAPI automatic JSON encoding"
+    },
+    "csrf": "SameSite=Lax cookie + JSON-only API (no form-encoded endpoints)",
+    "sql_injection": "SQLAlchemy ORM parameterized queries; FTS5 parameterized MATCH"
+  },
+  "cache_strategy": {
+    "html_documents": "Cache-Control: no-cache HTTP response header (middleware-injected)",
+    "static_assets": "?v=0.0.1 version token on all CSS/JS URLs",
+    "api_responses": "Cache-Control: no-store",
+    "note": "HTML cache headers MUST be real HTTP headers, not <meta> tags"
+  },
+  "risks": [
+    {
+      "risk": "SQLite concurrent write lock",
+      "mitigation": "WAL mode + retry mechanism; 0.0.1 is demo phase with low concurrency",
+      "residual": "Production migration to PostgreSQL needed"
+    },
+    {
+      "risk": "Markdown XSS in shared view",
+      "mitigation": "bleach whitelist filtering; shared page has no SPA JS loaded",
+      "residual": "Edge cases in bleach configuration may miss novel vectors"
+    },
+    {
+      "risk": "Session cookie leak (no HTTPS in dev)",
+      "mitigation": "HttpOnly + SameSite=Lax; local development only",
+      "residual": "Production requires HTTPS"
+    },
+    {
+      "risk": "Share link token enumeration",
+      "mitigation": "192-bit random token; brute force infeasible",
+      "residual": "None"
+    },
+    {
+      "risk": "Frontend JS load failure (CDN down)",
+      "mitigation": "Local copy of marked.min.js as fallback",
+      "residual": "CDN unavailable but local copy works"
+    },
+    {
+      "risk": "No password reset mechanism",
+      "mitigation": "seed.py can reset demo data; 2+ preset demo accounts",
+      "residual": "Real users cannot self-service reset (out of scope for 0.0.1)"
+    }
+  ],
+  "test_strategy": {
+    "framework": "pytest + pytest-asyncio + httpx.AsyncClient",
+    "fixtures": "conftest.py: async test client, test database, demo users",
+    "coverage_targets": [
+      "test_auth.py: register, login, logout, me (7 cases)",
+      "test_notes.py: CRUD, permission isolation, search, tag filter (10 cases)",
+      "test_tags.py: CRUD, note association, isolation (6 cases)",
+      "test_share.py: create, access, readonly, invalid token, expired, delete (6 cases)"
+    ]
+  },
+  "environment_variables": [
+    "SECRET_KEY",
+    "DATABASE_URL=sqlite+aiosqlite:///./notebase.db",
+    "BASE_PATH=/projects/notebase",
+    "VERSION=0.0.1",
+    "DEMO_USER1/DEMO_PASS1",
+    "DEMO_USER2/DEMO_PASS2",
+    "LOG_LEVEL=INFO"
+  ],
+  "implementation_tasks": [
+    {"order": 1, "task": "项目骨架", "description": "目录结构、requirements.txt、.env.example、config.py"},
+    {"order": 2, "task": "数据库", "description": "models 定义、database.py、FTS5 虚拟表、seed.py 演示数据"},
+    {"order": 3, "task": "认证模块", "description": "auth 路由+服务、中间件、Session Cookie、依赖注入"},
+    {"order": 4, "task": "笔记模块", "description": "笔记 CRUD 路由+服务、Markdown 渲染+清洗、FTS5 搜索"},
+    {"order": 5, "task": "标签模块", "description": "标签 CRUD、笔记-标签关联路由"},
+    {"order": 6, "task": "分享模块", "description": "分享链接生成/验证/撤销、公开访问页面模板"},
+    {"order": 7, "task": "前端", "description": "SPA 外壳、路由、页面、组件、CSS 响应式布局"},
+    {"order": 8, "task": "缓存策略", "description": "版本令牌注入 HTML、Cache-Control 中间件"},
+    {"order": 9, "task": "自测", "description": "pytest 覆盖注册登录、笔记CRUD、标签、搜索、分享链接、权限隔离"},
+    {"order": 10, "task": "文档同步", "description": "architecture.md 完整化、runbook.md 补充启动/测试步骤"}
+  ]
+}
