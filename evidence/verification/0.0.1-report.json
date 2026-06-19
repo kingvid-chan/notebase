@@ -1,0 +1,29 @@
+{
+  "iteration": "0.0.1",
+  "product_commit": "32ecbb0539d7d053d0bf0b408a6ef52132bb4aa3",
+  "verified_at": "2026-06-19T05:55:00+00:00",
+  "verifier": "Hermes",
+  "results": {
+    "pytest": {
+      "passed": 36,
+      "failed": 0,
+      "command": "pytest tests/ -v --tb=short"
+    },
+    "app_startup": {
+      "health": {"ok": true, "version": "0.0.1"},
+      "spa_serves": true
+    },
+    "requirements_coverage": {
+      "auth": "register, login, logout, me — 8 tests",
+      "notes": "CRUD, search, permissions — 8 tests",
+      "tags": "CRUD, association, isolation — 7 tests",
+      "share": "generate, access, revoke, permissions — 12 tests"
+    },
+    "warnings": {
+      "count": 135,
+      "categories": ["datetime.utcnow deprecation", "TemplateResponse param order"],
+      "blocking": false
+    }
+  },
+  "verdict": "PASS"
+}
