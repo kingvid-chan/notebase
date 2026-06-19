@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ page_title }} - Notebase 分享</title>
+    <link rel="stylesheet" href="{{ base_path }}/static/css/style.css?v={{ version }}">
+</head>
+<body class="shared-note-page">
+    <div class="shared-note-container">
+        <header class="shared-note-header">
+            <div class="shared-note-meta">
+                <span class="shared-badge">🔗 公开分享</span>
+                <span class="shared-note-date">更新于 {{ note.updated_at[:10] }}</span>
+            </div>
+            <h1 class="shared-note-title">{{ note.title }}</h1>
+        </header>
+        <article class="shared-note-content note-content">
+            {{ note.content_html | safe }}
+        </article>
+        <footer class="shared-note-footer">
+            <p>由 <a href="{{ base_path }}/">Notebase</a> 驱动 · 此页面为只读分享</p>
+        </footer>
+    </div>
+</body>
+</html>

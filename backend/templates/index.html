@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notebase - 笔记管理系统</title>
+    <link rel="stylesheet" href="{{ base_path }}/static/css/style.css?v={{ version }}">
+</head>
+<body>
+    <div id="app">
+        <header id="app-header">
+            <div class="header-left">
+                <a href="#/notes" class="logo">📒 Notebase</a>
+            </div>
+            <nav id="app-nav">
+                <a href="#/notes" class="nav-link" data-page="notes">笔记</a>
+                <a href="#/notes/new" class="nav-link" data-page="new">新建</a>
+            </nav>
+            <div class="header-right">
+                <span id="user-info" class="user-info"></span>
+                <button id="btn-logout" class="btn btn-sm" style="display:none">登出</button>
+                <a href="#/login" id="link-login" class="btn btn-sm">登录</a>
+            </div>
+        </header>
+        <main id="app-main">
+            <div class="loading">加载中...</div>
+        </main>
+        <div id="toast-container"></div>
+    </div>
+
+    <!-- marked.js CDN for client-side Markdown preview -->
+    <script src="https://cdn.jsdelivr.net/npm/marked@15.0.7/marked.min.js"></script>
+    <script>
+        window.__BASE_PATH__ = '{{ base_path }}';
+        window.__VERSION__ = '{{ version }}';
+    </script>
+    <script type="module" src="{{ base_path }}/static/js/app.js?v={{ version }}"></script>
+</body>
+</html>
