@@ -7,6 +7,10 @@ class TagCreateRequest(BaseModel):
     name: str = Field(min_length=1, max_length=50)
 
 
+class TagAddRequest(BaseModel):
+    tag_id: int = Field(ge=1)
+
+
 class TagResponse(BaseModel):
     id: int
     name: str
