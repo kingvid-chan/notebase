@@ -1,0 +1,135 @@
+{
+  "iteration": "0.0.1",
+  "tasks": [
+    {
+      "id": 1,
+      "name": "项目骨架",
+      "files": [
+        "requirements.txt",
+        ".env.example",
+        ".gitignore",
+        "backend/__init__.py",
+        "backend/config.py",
+        "backend/app.py"
+      ],
+      "acceptance": "目录结构符合技术方案；pip install -r requirements.txt 成功；config.py 可读取 .env；app.py 返回 FastAPI 实例"
+    },
+    {
+      "id": 2,
+      "name": "数据库",
+      "files": [
+        "backend/database.py",
+        "backend/models/__init__.py",
+        "backend/models/user.py",
+        "backend/models/note.py",
+        "backend/models/tag.py",
+        "backend/models/note_tag.py",
+        "backend/models/share_link.py",
+        "backend/seed.py"
+      ],
+      "acceptance": "所有模型定义与 ADR-001 表结构一致；database.py 提供 async session；FTS5 虚拟表可用；seed.py 可创建演示数据"
+    },
+    {
+      "id": 3,
+      "name": "认证模块",
+      "files": [
+        "backend/middleware.py",
+        "backend/dependencies.py",
+        "backend/services/__init__.py",
+        "backend/services/auth.py",
+        "backend/schemas/__init__.py",
+        "backend/schemas/user.py",
+        "backend/routers/__init__.py",
+        "backend/routers/auth.py"
+      ],
+      "acceptance": "注册/登录/登出 API 可调用；密码 bcrypt 哈希存储；Session Cookie (itsdangerous) 正确设置 HttpOnly/SameSite；get_current_user 依赖注入可用"
+    },
+    {
+      "id": 4,
+      "name": "笔记模块",
+      "files": [
+        "backend/services/markdown.py",
+        "backend/services/note.py",
+        "backend/schemas/note.py",
+        "backend/routers/notes.py"
+      ],
+      "acceptance": "笔记 CRUD API 可调用；Markdown→HTML 渲染+bleach 清洗正确；FTS5 全文搜索可用；权限隔离（用户只能操作自己的笔记）"
+    },
+    {
+      "id": 5,
+      "name": "标签模块",
+      "files": [
+        "backend/services/tag.py",
+        "backend/schemas/tag.py",
+        "backend/routers/tags.py"
+      ],
+      "acceptance": "标签 CRUD API 可调用；笔记-标签关联/解除关联可用；按标签筛选笔记可用；用户标签隔离"
+    },
+    {
+      "id": 6,
+      "name": "分享模块",
+      "files": [
+        "backend/services/share.py",
+        "backend/schemas/share_link.py",
+        "backend/routers/share.py",
+        "backend/templates/shared-note.html"
+      ],
+      "acceptance": "分享链接生成/撤销 API 可调用；公开分享页面无需登录访问；token 随机 32 字节 URL-safe；过期链接拒绝访问"
+    },
+    {
+      "id": 7,
+      "name": "前端",
+      "files": [
+        "backend/templates/index.html",
+        "frontend/css/style.css",
+        "frontend/js/app.js",
+        "frontend/js/router.js",
+        "frontend/js/api.js",
+        "frontend/js/state.js",
+        "frontend/js/pages/login.js",
+        "frontend/js/pages/register.js",
+        "frontend/js/pages/notes.js",
+        "frontend/js/pages/note-detail.js",
+        "frontend/js/components/note-list.js",
+        "frontend/js/components/note-editor.js",
+        "frontend/js/components/tag-badge.js",
+        "frontend/js/components/tag-picker.js",
+        "frontend/js/components/search-bar.js",
+        "frontend/js/components/share-panel.js",
+        "frontend/js/components/toast.js"
+      ],
+      "acceptance": "SPA 在 /projects/notebase/ 下可访问；Hash 路由工作正常；登录/注册/笔记CRUD/标签/搜索/分享 UI 可用；marked.js 实时预览；响应式布局"
+    },
+    {
+      "id": 8,
+      "name": "缓存策略",
+      "files": [
+        "backend/middleware.py",
+        "backend/app.py"
+      ],
+      "acceptance": "所有 HTML 响应带 Cache-Control: no-cache HTTP 头（非 meta 标签）；静态资源 URL 带 ?v=0.0.1 版本令牌；资源路径保留 /projects/notebase/ 前缀"
+    },
+    {
+      "id": 9,
+      "name": "自测",
+      "files": [
+        "tests/__init__.py",
+        "tests/conftest.py",
+        "tests/test_auth.py",
+        "tests/test_notes.py",
+        "tests/test_tags.py",
+        "tests/test_share.py"
+      ],
+      "acceptance": "pytest tests/ -v --tb=short 全部通过；覆盖注册登录、笔记CRUD、标签、全文搜索、分享链接、权限隔离"
+    },
+    {
+      "id": 10,
+      "name": "文档同步",
+      "files": [
+        "docs/architecture.md",
+        "docs/runbook.md"
+      ],
+      "acceptance": "architecture.md 反映实际架构；runbook.md 包含启动步骤、测试步骤、环境准备"
+    }
+  ]
+}
