@@ -1,0 +1,83 @@
+{
+  "version": "0.0.1",
+  "public_url": "https://120.24.117.67/projects/notebase/",
+  "timestamp": "2026-06-19T06:07:00+00:00",
+  "browser": "Browserbase (Chromium)",
+  "verdict": "PASS",
+  "workflows": {
+    "login": {
+      "status": "PASS",
+      "detail": "alice/demo123 和 bob/demo123 均能登录，登出正常",
+      "screenshots": ["login-0.0.1.png"]
+    },
+    "permission_isolation": {
+      "status": "PASS",
+      "detail": "alice 看到自己的笔记，bob 看到自己的笔记，互不可见",
+      "screenshots": []
+    },
+    "note_list": {
+      "status": "PASS",
+      "detail": "笔记列表展示标题、更新时间、内容预览，标签筛选过滤正确",
+      "screenshots": ["notes-list-0.0.1.png"]
+    },
+    "note_crud": {
+      "status": "PASS",
+      "detail": "创建「测试验收笔记」成功，标题和 Markdown 内容保存正确",
+      "screenshots": ["note-edit-0.0.1.png"]
+    },
+    "tag_filtering": {
+      "status": "PASS",
+      "detail": "标签筛选正确过滤笔记列表",
+      "screenshots": []
+    },
+    "share_link": {
+      "status": "PASS",
+      "detail": "生成分享链接成功，分享页面公开可访问、Markdown 完整渲染",
+      "screenshots": ["share-link-0.0.1.png", "share-public-0.0.1.png"]
+    },
+    "markdown_preview": {
+      "status": "WARN",
+      "detail": "编辑页面的 marked.js 实时预览未加载（CDN: cdn.jsdelivr.net），不影响服务器端渲染的分享页面",
+      "screenshots": []
+    },
+    "search": {
+      "status": "WARN",
+      "detail": "搜索输入框存在但未完全确认搜索功能有效",
+      "screenshots": []
+    },
+    "console_errors": {
+      "status": "PASS",
+      "detail": "浏览器控制台无 JS 错误",
+      "screenshots": []
+    },
+    "static_assets": {
+      "status": "PASS",
+      "detail": "CSS 和 JS 静态资源正常加载（96 条 CSS 规则生效）",
+      "screenshots": []
+    }
+  },
+  "issues": [
+    {
+      "severity": "minor",
+      "item": "marked.js 实时预览",
+      "detail": "编辑页 marked.js 从 CDN 加载失败导致实时预览不可用，分享页服务器端渲染正常"
+    },
+    {
+      "severity": "minor",
+      "item": "日期显示",
+      "detail": "演示数据全部显示 2026-06-19（未来日期），属于演示数据特征"
+    },
+    {
+      "severity": "minor",
+      "item": "重复标签",
+      "detail": "标签筛选栏中「帮助」标签出现两次"
+    }
+  ],
+  "screenshots": [
+    "evidence/verification/login-0.0.1.png",
+    "evidence/verification/notes-list-0.0.1.png",
+    "evidence/verification/note-edit-0.0.1.png",
+    "evidence/verification/share-link-0.0.1.png",
+    "evidence/verification/share-public-0.0.1.png"
+  ]
+}
