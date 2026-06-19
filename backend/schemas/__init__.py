@@ -10,7 +10,7 @@ from backend.schemas.share_link import (
     ShareLinkListResponse,
     ShareLinkResponse,
 )
-from backend.schemas.tag import TagCreateRequest, TagListResponse, TagResponse
+from backend.schemas.tag import TagAddRequest, TagCreateRequest, TagListResponse, TagResponse
 from backend.schemas.user import (
     AuthResponse,
     UserLoginRequest,

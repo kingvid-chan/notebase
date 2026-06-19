@@ -1,4 +1,4 @@
-"""笔记路由：CRUD、列表、搜索。"""
+"""笔记路由：CRUD、列表、搜索、标签关联。"""
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -13,8 +13,9 @@ from backend.schemas.note import (
     NoteResponse,
     NoteUpdateRequest,
 )
-from backend.schemas.tag import TagResponse
+from backend.schemas.tag import TagAddRequest, TagResponse
 from backend.services import note as note_service
+from backend.services import tag as tag_service
 
 router = APIRouter()
 
@@ -121,4 +122,41 @@ async def delete_note(
     if not note:
         raise HTTPException(status_code=404, detail="笔记不存在")
     await note_service.delete_note(db, note)
+    return {"ok": True}
+
+
+# ---------------------------------------------------------------------------
+# 标签关联
+# ---------------------------------------------------------------------------
+
+
+@router.post("/{note_id}/tags")
+async def add_note_tag(
+    note_id: int,
+    body: TagAddRequest,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """为笔记添加标签。"""
+    note = await note_service.get_note(db, note_id, current_user.id)
+    if not note:
+        raise HTTPException(status_code=404, detail="笔记不存在")
+    await tag_service.add_tag_to_note(db, note_id, body.tag_id)
+    return {"ok": True}
+
+
+@router.delete("/{note_id}/tags/{tag_id}")
+async def remove_note_tag(
+    note_id: int,
+    tag_id: int,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """移除笔记标签。"""
+    note = await note_service.get_note(db, note_id, current_user.id)
+    if not note:
+        raise HTTPException(status_code=404, detail="笔记不存在")
+    ok = await tag_service.remove_tag_from_note(db, note_id, tag_id)
+    if not ok:
+        raise HTTPException(status_code=404, detail="关联不存在")
     return {"ok": True}
