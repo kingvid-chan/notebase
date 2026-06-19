@@ -1,0 +1,41 @@
+{
+  "session_id": "claude-plan-20260619-001",
+  "iteration": "0.0.1",
+  "project": "notebase",
+  "timestamp": "2026-06-19T18:00:00+08:00",
+  "technical_plan": {
+    "markdown": "docs/decisions/001-technical-plan.md",
+    "json": "evidence/claude/technical-plan-0.0.1.json",
+    "summary": "FastAPI + SQLAlchemy + SQLite 后端，Vanilla JS SPA 前端，marked.js Markdown 渲染，Session Cookie 认证，bleach XSS 防护，FTS5 全文搜索，Hash 路由，响应式 CSS"
+  },
+  "tasks": [
+    {"id": 1, "name": "项目骨架", "description": "目录结构、requirements.txt、.env.example、config.py", "status": "completed"},
+    {"id": 2, "name": "数据库", "description": "models 定义、database.py、FTS5 虚拟表、seed.py 演示数据", "status": "completed"},
+    {"id": 3, "name": "认证模块", "description": "auth 路由+服务、中间件、Session Cookie、依赖注入", "status": "completed"},
+    {"id": 4, "name": "笔记模块", "description": "笔记 CRUD 路由+服务、Markdown 渲染+清洗、FTS5 搜索", "status": "completed"},
+    {"id": 5, "name": "标签模块", "description": "标签 CRUD、笔记-标签关联路由", "status": "completed"},
+    {"id": 6, "name": "分享模块", "description": "分享链接生成/验证/撤销、公开访问页面模板", "status": "completed"},
+    {"id": 7, "name": "前端", "description": "SPA 外壳、路由、页面、组件、CSS 响应式布局", "status": "completed"},
+    {"id": 8, "name": "缓存策略", "description": "版本令牌注入 HTML、Cache-Control 中间件", "status": "completed"},
+    {"id": 9, "name": "自测", "description": "pytest 覆盖注册登录、笔记CRUD、标签、搜索、分享链接、权限隔离", "status": "completed"},
+    {"id": 10, "name": "文档同步", "description": "architecture.md 完整化、runbook.md 补充启动/测试步骤", "status": "completed"}
+  ],
+  "implementation_commits": [
+    {"sha": "8c7ef6a", "message": "Open iteration 0.0.1: item_added (e000007) + iteration_opened (e000008)"},
+    {"sha": "8660221", "message": "技术方案与 handoff 完成: 001-technical-plan, technical-plan-0.0.1.json, handoff-0.0.1.json"},
+    {"sha": "8e9a1cb", "message": "task-1: 项目骨架 — requirements, .env.example, config, app.py"},
+    {"sha": "a00b475", "message": "task-2: 数据库模型与种子数据 — SQLAlchemy async models + FTS5 + demo data"},
+    {"sha": "0e5f5fa", "message": "task-3: 认证模块 — bcrypt 密码哈希 + itsdangerous Session Cookie"},
+    {"sha": "ba12d07", "message": "task-4: 笔记模块 — Markdown 渲染, bleach XSS 防护, FTS5 搜索"},
+    {"sha": "e081755", "message": "task-5: labels module — CRUD + note-label association"},
+    {"sha": "a699df3", "message": "task-6: share module — link generation, revocation, public access"},
+    {"sha": "9166566", "message": "task-7: frontend SPA — Vanilla JS, hash router, marked.js preview"},
+    {"sha": "60e46ea", "message": "task-8: cache strategy — Cache-Control headers + version tokens"},
+    {"sha": "3dee9f6", "message": "task-9/10: 自测完善 + 文档同步 — 36 tests PASS, architecture.md/runbook.md 完整化, handoff-0.0.1 ready"},
+    {"sha": "a7c5ccd", "message": "fix: add missing TagAddRequest schema (Claude task-5 oversight)"}
+  ],
+  "self_test_command": "cd /Users/cqw/外部需求/proj-bd3aaa && pytest tests/ -v --tb=short",
+  "self_test_result": "36 passed, 0 failed — all tests PASS after TagAddRequest fix (a7c5ccd)",
+  "ready_for_verification": true,
+  "note": "0.0.1 全部 10 项任务完成，36 项 pytest 全 PASS。architecture.md 和 runbook.md 已填入实际架构和操作步骤。commit a7c5ccd 修复了 task-5 遗漏的 TagAddRequest schema 类。待 Hermes 独立验收。"
+}

@@ -9,3 +9,7 @@ node_modules/
 dist/
 process-log/
 .paused
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
